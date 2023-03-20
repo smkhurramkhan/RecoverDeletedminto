@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#000000</color>
+    <color name="colorPrimary">#5EB591</color>
+    <color name="colorPrimaryDark">#37A878</color>
+
+    <color name="White">#ffffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="dinwhite">#cbffffff</color>
+    <color name="grayishwhite">#C1C1C1</color>
+    <color name="gray">#ffe7e7e7</color>
+    <color name="navy">#E2725B</color>
+    <color name="lightdark">#ff777777</color>
+    <color name="white">#ffffffff</color>
+    <color name="activated">#66186E7B</color>
+    <color name="grey">#E6E6E6</color>
+
+    <color name="hintcolor">#8C8C8C</color>
+    <color name="missed_call_bg">#B8ECEC</color>
+    <color name="green">#00DD00</color>
+    <color name="medium_grey">#d5d5d5</color>
+
+    <color name="black_dim">#212121</color>
+</resources>

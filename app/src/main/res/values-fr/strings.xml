@@ -1,0 +1,62 @@
+<resources>
+    <string name="add">Mettre à jour les applications</string>
+    <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="contact">Contact</string>
+    <string name="email">exemple@gmail.com</string>
+    <string name="empty_message">Aucun chat disponible</string>
+    <string name="only_empty_text">Aucune image disponible</string>
+    <string name="files">fichiers</string>
+    <string name="help">Tutoriel</string>
+    <string name="howitworks">Comment ça marche?</string>
+    <string name="menu_share">Partager</string>
+    <string name="menu_rate">Taux</string>
+    <string name="message_deleted">Message supprimé trouvé</string>
+    <string name="message_was_deleted">Appuyez pour vérifier le message supprimé maintenant.</string>
+    <string name="nav_header_desc">En-tête de navigation</string>
+    <string name="navigation_drawer_close">Fermer le tiroir de navigation</string>
+    <string name="navigation_drawer_open">Ouvrir le tiroir de navigation</string>
+    <string name="noti_obserb">notionserving</string>
+    <string name="off">Le service n\'est pas en cours d\'exécution. Cliquez pour commencer</string>
+    <string name="on">Le service est en cours d\'exécution</string>
+    <string name="refresh_files">refresh_files</string>
+    <string name="remove_permission_framgent">remove_permission_fragment</string>
+    <string name="select_app">Sélectionner les applications à surveiller</string>
+    <string name="share">Hé, découvrez cette application incroyable sur:</string>
+    <string name="thismsgwasdeleted">Ce message a été supprimé</string>
+    <string name="cemessageaetesupprime">Ce message a été supprimé.</string>
+    <string name="thismsgwasdeletedarabe">تم حذف هذه الرسالة</string>
+    <string name="unread">NON LU</string>
+
+    <string name="format_request_permision">%1$s devra disposer d\'une autorisation de lecture/écriture sur votre cartesd pour enregistrer des fichiers. Voulez-vous l\'accorder?</string>
+
+
+    <string name="we_need_manage_storage_permission" translatable="false">Cette application nécessite l\'autorisation de gérer le stockage de l\'appareil pour fonctionner correctement,
+         Veuillez accorder la permission. Assurez-vous que nous ne violons pas votre vie privée et que cette autorisation n\'est utilisée que pour votre accès complet à votre
+         document.</string>
+    <string name="delete">Supprimer</string>
+    <string name="no_audios_found">Aucun audio trouvé</string>
+    <string name="no_videos_found">Aucune vidéo trouvée</string>
+    <string name="no_images_found">Aucune image trouvée</string>
+    <string name="no_docs_found">Aucun document trouvé</string>
+    <string name="choose_language">Choisir la langue</string>
+    <string name="searchLanguage">Langue de recherche</string>
+    <string name="allow_permission">Autoriser l\'autorisation</string>
+
+
+    <string name="whats_permission">
+            Veuillez autoriser le dossier "Whatsapp Media Folder" à afficher/modifier/supprimer les données WhatsApp. C\'est
+         requis une seule fois.
+     </string>
+    <string name="folder_permission">Autorisation de dossier</string>
+    <string name="this_allows_recover_deleted_messages_to_backup_your_notification_in_case_they_are_deleted">Cela permet de récupérer les messages supprimés pour sauvegarder votre notification au cas où ils seraient supprimés.</string>
+    <string name="storagePermission">Autorisation de stockage</string>
+    <string name="dark_mode">Mode sombre</string>
+    <string name="language_change">Changer la langue</string>
+    <string name="home">Maison</string>
+    <string name="manage_apps">Gérer les applications</string>
+    <string name="restart_service">Redémarrer le service</string>
+    <string name="frag_chats">Chats</string>
+    <string name="frag_images">Images</string>
+    <string name="frag_videos">Vidéos</string>
+    <string name="frag_docs">Documents</string>
+</resources>

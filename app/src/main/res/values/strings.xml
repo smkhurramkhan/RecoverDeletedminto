@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name" translatable="false">Recover Deleted Messages</string>
+    <string name="add">Update Apps</string>
+    <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="contact">Contact</string>
+    <string name="email">example@gmail.com</string>
+    <string name="empty_message">No chats available</string>
+    <string name="only_empty_text">No images available</string>
+    <string name="files">files</string>
+    <string name="help">Tutorial</string>
+    <string name="howitworks">How it works?</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_rate">Rate</string>
+    <string name="message_deleted">Deleted Message Found</string>
+    <string name="message_was_deleted">Tap to check deleted message now.</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="noti_obserb">notionserving</string>
+    <string name="off">Service is not running. Click to start</string>
+    <string name="on">Service is running</string>
+    <string name="refresh_files">refresh_files</string>
+    <string name="remove_permission_framgent">remove_permission_fragment</string>
+    <string name="select_app">Select Apps to Monitor</string>
+    <string name="share">Hey check out this amazing app at:</string>
+    <string name="thismsgwasdeleted">This message was deleted</string>
+    <string name="cemessageaetesupprime">Ce message a été supprimé.</string>
+    <string name="thismsgwasdeletedarabe">تم حذف هذه الرسالة</string>
+    <string name="unread">UNREAD</string>
+
+    <string name="format_request_permision">%1$s will need to have read/write permission your sdcard to save Files.Do you want to grant it?</string>
+    <string name="interstitial_id" translatable="false"></string>
+    <string name="banner_id" translatable="false"></string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+
+
+    <string name="we_need_manage_storage_permission" translatable="false">This app requires manage device storage permission to work properly,
+        Please grant the permission. Be sure we do not violate your privacy and this permission is only used for your full access to your
+        documents.</string>
+    <string name="delete">Delete</string>
+    <string name="no_audios_found">No Audios found</string>
+    <string name="no_videos_found">No Videos found</string>
+    <string name="no_images_found">No Images found</string>
+    <string name="no_docs_found">No Document found</string>
+    <string name="choose_language">Choose Language</string>
+    <string name="searchLanguage">Search Language</string>
+    <string name="allow_permission">Allow Permission</string>
+
+
+    <string name="whats_permission">Please provide permission for "Whatsapp Media Folder" folder to view/edit/delete whatsapp data. This isonly required once.
+    </string>
+    <string name="folder_permission">Folder Permission</string>
+    <string name="this_allows_recover_deleted_messages_to_backup_your_notification_in_case_they_are_deleted">This Allows Recover Deleted Messages to backup your notification in case they are deleted.</string>
+    <string name="storagePermission">Storage Permission</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language_change">Change Language</string>
+    <string name="home">Home</string>
+    <string name="manage_apps">Manage Apps</string>
+    <string name="restart_service">Restart Service</string>
+    <string name="frag_chats">Chats</string>
+    <string name="frag_images">Images</string>
+    <string name="frag_videos">Videos</string>
+    <string name="frag_docs">Documents</string>
+</resources>

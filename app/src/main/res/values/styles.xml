@@ -1,0 +1,85 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="backgroundColor">@color/colorPrimary</item>
+        <item name="navigationdrawerColor">@color/white</item>
+        <item name="textColor">#000</item>
+        <item name="icontint">@color/colorPrimary</item>
+        <item name="tabcolor">#fff</item>
+        <item name="homeActivityBg">#fff</item>
+        <item name="buttoncolors">@color/white</item>
+        <item name="textColorsecondry">#fff</item>
+        <item name="imageicon">@color/colorPrimary</item>
+
+        <item name="android:layoutDirection">ltr</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">@color/colorPrimary</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="android:textColorPrimaryInverse">@color/white</item>
+
+    </style>
+
+
+    <!-- Dark Theme. -->
+    <style name="Darktheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#212121</item>
+        <item name="colorPrimaryDark">#000</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="navigationdrawerColor">#101010</item>
+        <item name="backgroundColor">#000</item>
+        <item name="textColor">#fff</item>
+        <item name="icontint">#fff</item>
+        <item name="tabcolor">#000</item>
+        <item name="homeActivityBg">#101010</item>
+        <item name="textColorsecondry">#fff</item>
+        <item name="buttoncolors">#000</item>
+        <item name="imageicon">#fff</item>
+
+        <item name="android:layoutDirection">ltr</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">@color/black_dim</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="android:textColorPrimaryInverse">@color/white</item>
+
+    </style>
+
+
+
+    <style name="AppTheme.AppBarOverlay" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="@style/ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.NoActionBar" parent="@style/AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="MyButton" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+    </style>
+
+    <style name="searchTheme" parent="@android:style/Theme.Holo">
+        <item name="android:textColor">@color/hintcolor</item>
+        <item name="editTextColor">@color/hintcolor</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:editTextColor">@color/hintcolor</item>
+        <item name="android:textColorHint">@color/hintcolor</item>
+        <item name="android:textCursorDrawable">@drawable/search_cursor</item>
+    </style>
+
+    <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/raleway_regular</item>
+    </style>
+
+</resources>
