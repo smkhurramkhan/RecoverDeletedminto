@@ -11,11 +11,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.provider.Settings
 import android.service.notification.NotificationListenerService
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
@@ -31,10 +33,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.example.recovermessages.R
 import com.example.recovermessages.db.AppDatabase
 import com.example.recovermessages.models.CacheFiles
@@ -47,6 +45,10 @@ import com.example.recovermessages.ui.home.fragments.FragmentUserChats
 import com.example.recovermessages.ui.home.viewmodel.ViewModelCache
 import com.example.recovermessages.ui.onboarding.OnBoardingActivity
 import com.example.recovermessages.utils.SharedPrefs
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -280,7 +282,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 startActivity(Intent(this, OnBoardingActivity::class.java))
             }
             R.id.restart -> {
-                ask()
+                if (!isNotificationListenerEnable)
+                    ask()
+                else
+                    Toast.makeText(this, "Permission already granted", Toast.LENGTH_LONG).show()
             }
             R.id.change_lang -> {
                 startActivity(Intent(this, ChooseLanguageActivity::class.java))
@@ -301,7 +306,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onRequestPermissionsResult(i: Int, strArr: Array<String>, iArr: IntArray) {
         super.onRequestPermissionsResult(i, strArr, iArr)
         val PERMISSION_REQUEST_CODE = 111
-        if (i == PERMISSION_REQUEST_CODE && iArr.size > 0) {
+        if (i == PERMISSION_REQUEST_CODE && iArr.isNotEmpty()) {
             if (iArr[0] == 0) {
                 createFolder()
                 val intent = Intent(getString(R.string.files))
@@ -340,7 +345,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if (Build.VERSION.SDK_INT >= 24) {
             NotificationListenerService.requestRebind(
                 ComponentName(
-                    applicationContext, NotifyListener::class.java
+                    this, NotifyListener::class.java
                 )
             )
         }
@@ -351,4 +356,17 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         startActivity(intent)
         finish()
     }
+
+
+    private val isNotificationListenerEnable: Boolean
+        get() {
+            val contentResolver = this.contentResolver
+            val enabledNotificationListeners =
+                Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
+            val packageName = this.packageName
+
+            return !(enabledNotificationListeners == null || !enabledNotificationListeners.contains(
+                packageName
+            ))
+        }
 }

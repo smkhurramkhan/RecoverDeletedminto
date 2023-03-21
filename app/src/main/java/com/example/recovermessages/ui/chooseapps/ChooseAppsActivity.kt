@@ -8,6 +8,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.View
@@ -114,7 +116,7 @@ class ChooseAppsActivity : BaseActivity() {
             }
             if (key == 1) {
                 for (str2 in AppDatabase(
-                    applicationContext
+                    this
                 ).allPackages) {
                     try {
                         arrayList2.add(
@@ -143,7 +145,7 @@ class ChooseAppsActivity : BaseActivity() {
                         saveToDB()
                     } else {
                         Toast.makeText(
-                            applicationContext,
+                            this,
                             "Please choose atLeast one application", Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -218,7 +220,7 @@ class ChooseAppsActivity : BaseActivity() {
         binding = ActivityChooseAppsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        handler = Handler()
+        handler = Handler(Looper.getMainLooper())
         utils = Utils(this)
         key = intent.getIntExtra("key", 0)
         if (key == 1) {
@@ -246,8 +248,7 @@ class ChooseAppsActivity : BaseActivity() {
 
     private suspend fun doInBackground() {
         withContext(Dispatchers.IO) {
-            val AppDatabase =
-                AppDatabase(this@ChooseAppsActivity)
+            val appDatabase = AppDatabase(this@ChooseAppsActivity)
             if (key == 1) {
                 val sb = "size  " + addedPackagesToCompare.size
                 Timber.d("keylog %s", sb)
@@ -265,13 +266,13 @@ class ChooseAppsActivity : BaseActivity() {
                     }
                 }
                 while (i < appPackList.size) {
-                    AppDatabase.addPackages(appPackList[i])
+                    appDatabase.addPackages(appPackList[i])
                     ++i
                 }
-                AppDatabase.removePackageAndMsg(list)
+                appDatabase.removePackageAndMsg(list)
             } else {
                 for (j in appPackList.indices) {
-                    AppDatabase.addPackages(appPackList[j])
+                    appDatabase.addPackages(appPackList[j])
                 }
             }
         }
@@ -283,7 +284,7 @@ class ChooseAppsActivity : BaseActivity() {
                 finish()
                 val intent = Intent(getString(R.string.noti_obserb))
                 intent.putExtra(getString(R.string.noti_obserb), "update")
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                LocalBroadcastManager.getInstance(this@ChooseAppsActivity).sendBroadcast(intent)
                 startActivity(
                     Intent(
                         this@ChooseAppsActivity,
@@ -291,11 +292,27 @@ class ChooseAppsActivity : BaseActivity() {
                     )
                 )
             } else {
-                setupNotificationPermission()
+                if (!isNotificationListenerEnable)
+                    setupNotificationPermission()
+                else
+                startActivity(Intent(this@ChooseAppsActivity, HomeActivity::class.java))
+                finish()
             }
         }
     }
 
+
+    private val isNotificationListenerEnable: Boolean
+        get() {
+            val contentResolver = this.contentResolver
+            val enabledNotificationListeners =
+                Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
+            val packageName = this.packageName
+
+            return !(enabledNotificationListeners == null || !enabledNotificationListeners.contains(
+                packageName
+            ))
+        }
 
     override fun onResume() {
         super.onResume()
@@ -303,7 +320,7 @@ class ChooseAppsActivity : BaseActivity() {
             saveSetup()
             val intent = Intent(getString(R.string.noti_obserb))
             intent.putExtra(getString(R.string.noti_obserb), "update")
-            LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
         }
     }
 }
