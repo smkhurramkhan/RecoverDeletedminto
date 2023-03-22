@@ -288,7 +288,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     Toast.makeText(this, "Permission already granted", Toast.LENGTH_LONG).show()
             }
             R.id.change_lang -> {
-                startActivity(Intent(this, ChooseLanguageActivity::class.java))
+                startActivity(
+                    Intent(this, ChooseLanguageActivity::class.java)
+                        .putExtra("fromStart", false)
+                )
             }
             R.id.manage -> {
                 val intent = Intent(this, ChooseAppsActivity::class.java)

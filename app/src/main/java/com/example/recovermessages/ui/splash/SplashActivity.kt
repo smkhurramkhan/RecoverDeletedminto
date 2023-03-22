@@ -11,19 +11,31 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.example.recovermessages.databinding.ActivitySplashBinding
 import com.example.recovermessages.ui.BaseActivity
+import com.example.recovermessages.ui.chooselanguage.ChooseLanguageActivity
 import com.example.recovermessages.ui.main.MainActivity
 import com.example.recovermessages.ui.permission.PermissionActivity
 import com.example.recovermessages.utils.AppUtils
+import com.example.recovermessages.utils.SharedPrefs
 
 class SplashActivity : BaseActivity() {
     private lateinit var splashBinding: ActivitySplashBinding
+    private var sharedPrefs: SharedPrefs? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppUtils.setStatusBarColor(this)
         splashBinding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(splashBinding.root)
 
-        startIntentForMainActivity()
+        sharedPrefs = SharedPrefs(this)
+
+        if (sharedPrefs?.firstRun == true) {
+            val intent = Intent(this, ChooseLanguageActivity::class.java)
+            intent.putExtra("fromStart", true)
+            startActivity(intent)
+            finish()
+        } else {
+            startIntentForMainActivity()
+        }
     }
 
 
@@ -31,7 +43,7 @@ class SplashActivity : BaseActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (isNotificationListenerEnable
                     &&
                     ActivityCompat.checkSelfPermission(
@@ -49,6 +61,7 @@ class SplashActivity : BaseActivity() {
                         Manifest.permission.READ_MEDIA_VIDEO
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
+
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -58,7 +71,7 @@ class SplashActivity : BaseActivity() {
                     finish()
                 }
 
-            }else{
+            } else {
                 if (isNotificationListenerEnable
                     &&
                     ActivityCompat.checkSelfPermission(

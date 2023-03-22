@@ -10,17 +10,27 @@ import com.example.recovermessages.ui.BaseActivity
 import com.example.recovermessages.ui.chooselanguage.adapter.ChooseLanguageAdapter
 import com.example.recovermessages.ui.chooselanguage.model.LanguagesModel
 import com.example.recovermessages.ui.home.HomeActivity
+import com.example.recovermessages.ui.permission.PermissionActivity
 import com.example.recovermessages.utils.LanguageUtils
+import com.example.recovermessages.utils.SharedPrefs
 
 
 class ChooseLanguageActivity : BaseActivity() {
     private var languagesList = mutableListOf<LanguagesModel>()
     private var adapterLanguages: ChooseLanguageAdapter? = null
     private lateinit var chooseLanguageBinding: ActivityChooseLanguageBinding
+    private var fromStart = false
+    private var sharedPrefs: SharedPrefs? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chooseLanguageBinding = ActivityChooseLanguageBinding.inflate(layoutInflater)
         languageUtils = LanguageUtils(this)
+
+        sharedPrefs = SharedPrefs(this)
+
+        fromStart = intent.getBooleanExtra("fromStart", false)
+
         initLanguageData()
         setContentView(chooseLanguageBinding.root)
         initRecycler()
@@ -68,10 +78,16 @@ class ChooseLanguageActivity : BaseActivity() {
     }
 
     private fun sendIntent() {
-        val nextScreen = Intent(this, HomeActivity::class.java)
-        nextScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        startActivity(nextScreen)
-        finish()
+        sharedPrefs?.firstRun = false
+        if (fromStart) {
+            startActivity(Intent(this, PermissionActivity::class.java))
+            finish()
+        } else {
+            val nextScreen = Intent(this, HomeActivity::class.java)
+            nextScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(nextScreen)
+            finish()
+        }
     }
 
 }

@@ -131,6 +131,7 @@ class ChooseAppsActivity : BaseActivity() {
                         this@ChooseAppsActivity, HomeActivity::class.java
                     )
                 )
+                finish()
             } else {
                 if (!isNotificationListenerEnable) setupNotificationPermission()
                 else startActivity(Intent(this@ChooseAppsActivity, HomeActivity::class.java))
@@ -255,13 +256,13 @@ class ChooseAppsActivity : BaseActivity() {
                     try {
                         startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
                     } catch (ex: Exception) {
-                        finish()
                         startActivity(Intent(this@ChooseAppsActivity, HomeActivity::class.java))
+                        finish()
                     }
                 }
             } catch (ex2: Exception) {
-                finish()
                 startActivity(Intent(this@ChooseAppsActivity, HomeActivity::class.java))
+                finish()
             }
         }
         alertDialog.setNegativeButton("Cancel") { dialog: DialogInterface, which: Int -> dialog.cancel() }
