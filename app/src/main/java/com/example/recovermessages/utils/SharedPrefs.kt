@@ -26,10 +26,10 @@ class SharedPrefs(context: Context?) {
             editor!!.commit()
         }
 
-    var isPremium: Boolean
-        get() = mysharedpref!!.getBoolean("premium", false)
+    var isAppSelected: Boolean
+        get() = mysharedpref!!.getBoolean("appsSelected", false)
         set(flag) {
-            editor?.putBoolean("premium", flag)
+            editor?.putBoolean("appsSelected", flag)
             editor?.commit()
         }
 

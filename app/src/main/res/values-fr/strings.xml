@@ -22,7 +22,7 @@
     <string name="remove_permission_framgent">remove_permission_fragment</string>
     <string name="select_app">Sélectionner les applications à surveiller</string>
     <string name="share">Hé, découvrez cette application incroyable sur:</string>
-    <string name="thismsgwasdeleted">Ce message a été supprimé</string>
+
     <string name="cemessageaetesupprime">Ce message a été supprimé.</string>
     <string name="thismsgwasdeletedarabe">تم حذف هذه الرسالة</string>
     <string name="unread">NON LU</string>

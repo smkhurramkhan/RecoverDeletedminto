@@ -23,7 +23,7 @@
     <string name="remove_permission_framgent">remove_permission_fragment</string>
     <string name="select_app">Select Apps to Monitor</string>
     <string name="share">Hey check out this amazing app at:</string>
-    <string name="thismsgwasdeleted">This message was deleted</string>
+    <string name="thismsgwasdeleted" translatable="false">This message was deleted</string>
     <string name="cemessageaetesupprime">Ce message a été supprimé.</string>
     <string name="thismsgwasdeletedarabe">تم حذف هذه الرسالة</string>
     <string name="unread">UNREAD</string>

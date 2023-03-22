@@ -31,6 +31,7 @@ import com.example.recovermessages.ui.chooseapps.adapters.AppListAdapter
 import com.example.recovermessages.ui.home.HomeActivity
 import com.example.recovermessages.utils.AppUtils.hide
 import com.example.recovermessages.utils.AppUtils.show
+import com.example.recovermessages.utils.SharedPrefs
 import com.example.recovermessages.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,21 +43,108 @@ class ChooseAppsActivity : BaseActivity() {
     private var addedPackagesToCompare = mutableListOf<String>()
     private var appListAdapter: AppListAdapter? = null
     private var appPackList = mutableListOf<String>()
-    private var asking = false
+    private var asking = true
     private var handler: Handler? = null
     private var key = 0
     private var utils: Utils? = null
 
     private lateinit var binding: ActivityChooseAppsBinding
+    private var sharedPrefs: SharedPrefs? = null
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityChooseAppsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        sharedPrefs = SharedPrefs(this)
+
+        handler = Handler(Looper.getMainLooper())
+        utils = Utils(this)
+        key = intent.getIntExtra("key", 0)
+        if (key == 1) {
+            setUpAppList()
+        } else {
+            setUpAppList()
+            termsSetup()
+        }
+
+        /**/
+    }
+
+
+    private fun backgroundTask() {
+        lifecycleScope.launch {
+            onPreExecute()
+            doInBackground()
+            onPostExecute()
+        }
+    }
+
+    private suspend fun onPreExecute() {
+        withContext(Dispatchers.Main) {
+            Timber.d("OnPreExecute")
+        }
+    }
+
+    private suspend fun doInBackground() {
+        withContext(Dispatchers.IO) {
+            val appDatabase = AppDatabase(this@ChooseAppsActivity)
+            if (key == 1) {
+                val sb = "size  " + addedPackagesToCompare.size
+                Timber.d("keylog %s", sb)
+                val list = ArrayList<String>()
+                val iterator: Iterator<String> = addedPackagesToCompare.iterator()
+                var i: Int
+                while ((if (iterator.hasNext()) 1 else 0).also { i = it } != 0) {
+                    val s = iterator.next()
+                    if (!appPackList.contains(s)) {
+                        list.add(s)
+                        Timber.d("keylog %s", s)
+                    } else {
+                        val sb2 = "dont remove $s"
+                        Timber.d("keylog %s", sb2)
+                    }
+                }
+                while (i < appPackList.size) {
+                    appDatabase.addPackages(appPackList[i])
+                    ++i
+                }
+                appDatabase.removePackageAndMsg(list)
+            } else {
+                for (j in appPackList.indices) {
+                    appDatabase.addPackages(appPackList[j])
+                }
+            }
+        }
+    }
+
+    private suspend fun onPostExecute() {
+        withContext(Dispatchers.Main) {
+            if (key == 1) {
+                finish()
+                val intent = Intent(getString(R.string.noti_obserb))
+                intent.putExtra(getString(R.string.noti_obserb), "update")
+                LocalBroadcastManager.getInstance(this@ChooseAppsActivity).sendBroadcast(intent)
+                startActivity(
+                    Intent(
+                        this@ChooseAppsActivity, HomeActivity::class.java
+                    )
+                )
+            } else {
+                if (!isNotificationListenerEnable) setupNotificationPermission()
+                else startActivity(Intent(this@ChooseAppsActivity, HomeActivity::class.java))
+                finish()
+            }
+        }
+    }
 
     private fun notSystemApps(packageInfo: PackageInfo): Boolean {
         return packageInfo.applicationInfo.flags and 1 != 0
     }
 
     private fun saveSetup() {
-        val edit = getSharedPreferences("SETUP", 0).edit()
-        edit.putBoolean("setup", true)
-        edit.apply()
+        sharedPrefs?.isAppSelected = true
         startActivity(Intent(this, HomeActivity::class.java))
         finish()
     }
@@ -70,14 +158,12 @@ class ChooseAppsActivity : BaseActivity() {
         binding.progress.show()
 
         AsyncLayoutInflater(this).inflate(
-            R.layout.app_list_recycler,
-            LinearLayout(this)
+            R.layout.app_list_recycler, LinearLayout(this)
         ) { view: View, i: Int, viewGroup: ViewGroup? ->
             binding.progress.hide()
             binding.main.addView(view)
             setupAppListRecycler(
-                view.findViewById(R.id.recycle),
-                findViewById(R.id.button)
+                view.findViewById(R.id.recycle), findViewById(R.id.button)
             )
         }
     }
@@ -107,9 +193,7 @@ class ChooseAppsActivity : BaseActivity() {
             }
             var i = 0
             while (i < installedPackages.size) {
-                if (!(notSystemApps(installedPackages[i]) ||
-                            arrayList.contains(installedPackages[i]))
-                ) {
+                if (!(notSystemApps(installedPackages[i]) || arrayList.contains(installedPackages[i]))) {
                     arrayList.add(installedPackages[i])
                 }
                 i++
@@ -121,8 +205,7 @@ class ChooseAppsActivity : BaseActivity() {
                     try {
                         arrayList2.add(
                             packageManager.getPackageInfo(
-                                str2,
-                                PackageManager.GET_PERMISSIONS
+                                str2, PackageManager.GET_PERMISSIONS
                             )
                         )
                         appPackList.add(str2)
@@ -134,19 +217,23 @@ class ChooseAppsActivity : BaseActivity() {
                 }
             }
             appListAdapter = AppListAdapter(
-                arrayList,
-                this@ChooseAppsActivity, addedPackages
+                arrayList, this@ChooseAppsActivity, addedPackages
             )
             handler?.post {
                 recyclerView.adapter = appListAdapter
                 binding.progress.hide()
                 button.setOnClickListener {
                     if (appPackList.size > 0) {
+                        if (asking && utils?.isNotificationEnabled == true) {
+                            saveSetup()
+                            val intent = Intent(getString(R.string.noti_obserb))
+                            intent.putExtra(getString(R.string.noti_obserb), "update")
+                            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+                        }
                         saveToDB()
                     } else {
                         Toast.makeText(
-                            this,
-                            "Please choose atLeast one application", Toast.LENGTH_SHORT
+                            this, "Please choose atLeast one application", Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -206,101 +293,14 @@ class ChooseAppsActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (key == 1) {
+        /*if (key == 1) {
             finish()
             super.onBackPressed()
-            startActivity(Intent(this, HomeActivity::class.java))
             return
-        }
+        }*/
+        startActivity(Intent(this, HomeActivity::class.java))
         finish()
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityChooseAppsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        handler = Handler(Looper.getMainLooper())
-        utils = Utils(this)
-        key = intent.getIntExtra("key", 0)
-        if (key == 1) {
-            setUpAppList()
-        } else {
-            setUpAppList()
-            termsSetup()
-        }
-    }
-
-
-    private fun backgroundTask() {
-        lifecycleScope.launch {
-            onPreExecute()
-            doInBackground()
-            onPostExecute()
-        }
-    }
-
-    private suspend fun onPreExecute() {
-        withContext(Dispatchers.Main) {
-            Timber.d("OnPreExecute")
-        }
-    }
-
-    private suspend fun doInBackground() {
-        withContext(Dispatchers.IO) {
-            val appDatabase = AppDatabase(this@ChooseAppsActivity)
-            if (key == 1) {
-                val sb = "size  " + addedPackagesToCompare.size
-                Timber.d("keylog %s", sb)
-                val list = ArrayList<String>()
-                val iterator: Iterator<String> = addedPackagesToCompare.iterator()
-                var i: Int
-                while ((if (iterator.hasNext()) 1 else 0).also { i = it } != 0) {
-                    val s = iterator.next()
-                    if (!appPackList.contains(s)) {
-                        list.add(s)
-                        Timber.d("keylog %s", s)
-                    } else {
-                        val sb2 = "dont remove $s"
-                        Timber.d("keylog %s", sb2)
-                    }
-                }
-                while (i < appPackList.size) {
-                    appDatabase.addPackages(appPackList[i])
-                    ++i
-                }
-                appDatabase.removePackageAndMsg(list)
-            } else {
-                for (j in appPackList.indices) {
-                    appDatabase.addPackages(appPackList[j])
-                }
-            }
-        }
-    }
-
-    private suspend fun onPostExecute() {
-        withContext(Dispatchers.Main) {
-            if (key == 1) {
-                finish()
-                val intent = Intent(getString(R.string.noti_obserb))
-                intent.putExtra(getString(R.string.noti_obserb), "update")
-                LocalBroadcastManager.getInstance(this@ChooseAppsActivity).sendBroadcast(intent)
-                startActivity(
-                    Intent(
-                        this@ChooseAppsActivity,
-                        HomeActivity::class.java
-                    )
-                )
-            } else {
-                if (!isNotificationListenerEnable)
-                    setupNotificationPermission()
-                else
-                startActivity(Intent(this@ChooseAppsActivity, HomeActivity::class.java))
-                finish()
-            }
-        }
-    }
-
 
     private val isNotificationListenerEnable: Boolean
         get() {
@@ -313,14 +313,4 @@ class ChooseAppsActivity : BaseActivity() {
                 packageName
             ))
         }
-
-    override fun onResume() {
-        super.onResume()
-        if (asking && utils?.isNotificationEnabled == true) {
-            saveSetup()
-            val intent = Intent(getString(R.string.noti_obserb))
-            intent.putExtra(getString(R.string.noti_obserb), "update")
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-        }
-    }
 }
